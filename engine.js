@@ -46,10 +46,7 @@ export class GameEngine{
     for(const o of this.solids()){if(!overlap(hitbox(p),o))continue;const hb=hitbox(p);const topContact=p.gravity>0&&Math.abs(hb.y-(o.y+o.h))<5;const bottomContact=p.gravity<0&&Math.abs(hb.y+hb.h-o.y)<5;if(!topContact&&!bottomContact)return false}
     return true;
   }
-  checkBounds(p){
-    if(p.mode===MODE.CUBE||p.mode===MODE.BALL){if(p.gravity>0&&p.y<0){p.y=0;p.vy=0;p.onGround=true}if(p.gravity<0&&p.y+p.size>WORLD.H){p.y=WORLD.H-p.size;p.vy=0;p.onGround=true}return true}
-    return p.y>=WORLD.FLOOR&&p.y+p.size<=WORLD.H;
-  }
+  checkBounds(p){if(p.mode===MODE.CUBE||p.mode===MODE.BALL){if(p.gravity>0&&p.y<0){p.y=0;p.vy=0;p.onGround=true}if(p.gravity<0&&p.y+p.size>WORLD.H){p.y=WORLD.H-p.size;p.vy=0;p.onGround=true}return true}return p.y>=WORLD.FLOOR&&p.y+p.size<=WORLD.H}
   solids(){return(this.level.objects||[]).filter(o=>o.type===OBJECTS.BLOCK||o.type===OBJECTS.PLATFORM)}
   hazards(){return(this.level.objects||[]).filter(o=>o.type===OBJECTS.SPIKE||o.type===OBJECTS.DOUBLE||o.type===OBJECTS.SAW)}
   checkHazards(p){const b=hitbox(p);for(const o of this.hazards()){if(o.type===OBJECTS.SAW){const cx=o.x+o.w/2,cy=o.y+o.h/2,dx=b.x+b.w/2-cx,dy=b.y+b.h/2-cy,r=o.w/2+b.w*.45;if(dx*dx+dy*dy<r*r)return false}else{const n=o.type===OBJECTS.DOUBLE?2:1;for(let i=0;i<n;i++){const h={x:o.x+i*40+5,y:o.y,w:Math.min(30,o.w-8),h:o.h};if(overlap(b,h))return false}}}return true}
@@ -67,8 +64,15 @@ export class GameEngine{
     if(p.mode===MODE.WAVE)return;
     const b=hitbox(p);
     for(const o of this.level.objects||[]){if(!overlap(b,o))continue;const key=`${o.type}:${o.x}:${o.y}:${p.id}`;
-      if(o.type===OBJECTS.PAD&&!this.actions.has(key)){const descending=p.gravity>0?p.vy<0:p.vy>0;if(descending){p.vy=p.gravity*760;p.onGround=false;this.actions.add(key)}}
-      if((o.type===OBJECTS.RING||o.type===OBJECTS.GRAVITY_RING)&&p.inputBuffer>0&&!this.actions.has(key)){if(o.type===OBJECTS.RING)p.vy=p.gravity*700;else{p.gravity*=-1;p.vy=0;p.onGround=false}p.inputBuffer=0;this.actions.add(key)}
+      if(o.type===OBJECTS.PAD&&!this.actions.has(key)){
+        const touchingSurface=p.onGround;
+        const descending=p.gravity>0?p.vy<0:p.vy>0;
+        if(touchingSurface||descending){p.vy=p.gravity*760;p.onGround=false;this.actions.add(key)}
+      }
+      if((o.type===OBJECTS.RING||o.type===OBJECTS.GRAVITY_RING)&&p.inputBuffer>0&&!this.actions.has(key)){
+        if(o.type===OBJECTS.RING)p.vy=p.gravity*700;else{p.gravity*=-1;p.vy=0;p.onGround=false}
+        p.inputBuffer=0;this.actions.add(key)
+      }
     }
     p.inputBuffer=0;
   }
