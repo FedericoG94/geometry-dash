@@ -3,12 +3,34 @@ export class Renderer{
   constructor(canvas){this.c=canvas;this.x=canvas.getContext('2d',{alpha:false});this.w=1;this.h=1;this.dpr=1;this.scale=1;this.camera=0;this.worldH=320;window.addEventListener('resize',()=>this.resize(),{passive:true});window.addEventListener('orientationchange',()=>setTimeout(()=>this.resize(),250),{passive:true});this.resize()}
   resize(){const v=window.visualViewport;this.w=Math.max(1,Math.floor(v?.width||innerWidth));this.h=Math.max(1,Math.floor(v?.height||innerHeight));this.dpr=Math.min(devicePixelRatio||1,2);this.scale=Math.max(.7,Math.min(2.2,this.h/this.worldH));this.c.width=this.w*this.dpr;this.c.height=this.h*this.dpr;this.c.style.width=this.w+'px';this.c.style.height=this.h+'px';this.x.setTransform(this.dpr,0,0,this.dpr,0,0)}
   sy(y,h=0){return this.h-(y+h)*this.scale}
-  draw(scene,save){const x=this.x,w=this.w,h=this.h;const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,COLORS.bg1);g.addColorStop(1,COLORS.bg2);x.fillStyle=g;x.fillRect(0,0,w,h);x.strokeStyle=COLORS.grid;x.lineWidth=1;const off=(-scene.camera*.18)%60;for(let px=off;px<w;px+=60){x.beginPath();x.moveTo(px,0);x.lineTo(px,h);x.stroke()}for(let py=60;py<this.sy(0);py+=60){x.beginPath();x.moveTo(0,py);x.lineTo(w,py);x.stroke()}
-    x.fillStyle=COLORS.ground;x.fillRect(0,this.sy(0),w,h-this.sy(0));x.strokeStyle=COLORS.line;x.lineWidth=3;x.beginPath();x.moveTo(0,this.sy(0));x.lineTo(w,this.sy(0));x.stroke();
+  draw(scene,save){
+    const x=this.x,w=this.w,h=this.h;
+    const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,COLORS.bg1);g.addColorStop(1,COLORS.bg2);x.fillStyle=g;x.fillRect(0,0,w,h);
+    x.strokeStyle=COLORS.grid;x.lineWidth=1;
+    const off=(-scene.camera*.18)%60;for(let px=off;px<w;px+=60){x.beginPath();x.moveTo(px,0);x.lineTo(px,h);x.stroke()}
+    for(let py=60;py<this.sy(0);py+=60){x.beginPath();x.moveTo(0,py);x.lineTo(w,py);x.stroke()}
+    const floorY=this.sy(0);
+    x.fillStyle=COLORS.ground;x.fillRect(0,Math.max(0,floorY),w,Math.max(0,h-floorY));
+    x.strokeStyle=COLORS.line;x.lineWidth=3;x.beginPath();x.moveTo(0,floorY-.5);x.lineTo(w,floorY-.5);x.stroke();
     for(const o of scene.objects){const sx=o.x-scene.camera;if(sx+o.w<-80||sx>w+80)continue;this.object(o,sx)}
     for(const p of scene.players){if(!p.alive)continue;this.player(p,scene.camera,save)}
-    return this.x
   }
-  object(o,sx){const x=this.x;const y=this.sy(o.y,o.h);if(o.type==='spike'||o.type==='doubleSpike'){const n=o.type==='doubleSpike'?2:1;for(let i=0;i<n;i++){const bx=sx+i*40;x.fillStyle='#0c111a';x.beginPath();x.moveTo(bx,this.sy(o.y));x.lineTo(bx+17,y);x.lineTo(bx+34,this.sy(o.y));x.closePath();x.fill();x.strokeStyle='#fff';x.stroke()}return}if(o.type==='saw'){x.fillStyle='#111823';x.beginPath();x.arc(sx+o.w/2,this.sy(o.y,o.h/2),o.w/2,0,Math.PI*2);x.fill();x.strokeStyle='#fff';x.stroke();return}if(o.type==='pad'){x.fillStyle=COLORS.pad;x.fillRect(sx,y,o.w,10);return}if(o.type==='ring'||o.type==='gravityRing'){x.strokeStyle=o.type==='ring'?COLORS.ring:COLORS.gravity;x.lineWidth=5;x.beginPath();x.arc(sx+o.w/2,this.sy(o.y,o.h/2),o.w/2,0,Math.PI*2);x.stroke();return}const c=o.type==='gravityPortal'?COLORS.gravity:o.type==='speedPortal'?COLORS.speed:o.type==='miniPortal'?COLORS.mini:o.type==='dualPortal'?COLORS.dual:COLORS.portal;x.fillStyle=c;x.globalAlpha=.78;x.fillRect(sx,y,o.w,Math.max(o.h*this.scale,18));x.globalAlpha=1;x.strokeStyle='#fff';x.strokeRect(sx,y,o.w,Math.max(o.h*this.scale,18))}
-  player(p,camera,save){const skin={cyan:['#42e8ff','#fff'],red:['#ff5577','#ffd6df'],green:['#7dff5b','#e7ffd9'],gold:['#ffd84d','#fff4b8']}[save.settings.skin]||['#42e8ff','#fff'];const s=p.size,sx=p.x-camera,sy=this.sy(p.y,s);this.x.save();this.x.translate(sx+s/2,sy+s/2);this.x.rotate(p.rotation||0);this.x.fillStyle=skin[0];if(p.mode==='wave'){this.x.beginPath();this.x.moveTo(-s/2,s/2);this.x.lineTo(s/2,0);this.x.lineTo(-s/2,-s/2);this.x.closePath();this.x.fill()}else this.x.fillRect(-s/2,-s/2,s,s);this.x.strokeStyle=skin[1];this.x.strokeRect(-s/2,-s/2,s,s);this.x.fillStyle='#092038';this.x.fillRect(-7,-6,4,4);this.x.fillRect(3,-6,4,4);this.x.restore()}
+  object(o,sx){
+    const x=this.x,y=this.sy(o.y,o.h);
+    if(o.type==='spike'||o.type==='doubleSpike'){const n=o.type==='doubleSpike'?2:1;for(let i=0;i<n;i++){const bx=sx+i*40;x.fillStyle='#0c111a';x.beginPath();x.moveTo(bx,this.sy(o.y));x.lineTo(bx+17,y);x.lineTo(bx+34,this.sy(o.y));x.closePath();x.fill();x.strokeStyle='#fff';x.stroke()}return}
+    if(o.type==='saw'){x.fillStyle='#111823';x.beginPath();x.arc(sx+o.w/2,this.sy(o.y,o.h/2),o.w/2,0,Math.PI*2);x.fill();x.strokeStyle='#fff';x.stroke();return}
+    if(o.type==='pad'){x.fillStyle=COLORS.pad;x.fillRect(sx,y,o.w,Math.max(8,10));return}
+    if(o.type==='ring'||o.type==='gravityRing'){x.strokeStyle=o.type==='ring'?COLORS.ring:COLORS.gravity;x.lineWidth=5;x.beginPath();x.arc(sx+o.w/2,this.sy(o.y,o.h/2),o.w/2,0,Math.PI*2);x.stroke();return}
+    if(o.type==='block'||o.type==='platform'){
+      x.fillStyle='#101722';x.fillRect(sx,y,o.w,o.h*this.scale);x.strokeStyle='#fff';x.strokeRect(sx,y,o.w,o.h*this.scale);return;
+    }
+    const c=o.type==='gravityPortal'?COLORS.gravity:o.type==='speedPortal'?COLORS.speed:o.type==='miniPortal'?COLORS.mini:o.type==='dualPortal'?COLORS.dual:COLORS.portal;
+    x.fillStyle=c;x.globalAlpha=.78;x.fillRect(sx,y,o.w,Math.max(o.h*this.scale,18));x.globalAlpha=1;x.strokeStyle='#fff';x.strokeRect(sx,y,o.w,Math.max(o.h*this.scale,18));
+  }
+  player(p,camera,save){
+    const skin={cyan:['#42e8ff','#fff'],red:['#ff5577','#ffd6df'],green:['#7dff5b','#e7ffd9'],gold:['#ffd84d','#fff4b8']}[save.settings.skin]||['#42e8ff','#fff'];
+    const s=p.size,sx=p.x-camera,sy=this.sy(p.y,s);this.x.save();this.x.translate(sx+s/2,sy+s/2);this.x.rotate(p.rotation||0);this.x.fillStyle=skin[0];
+    if(p.mode==='wave'){this.x.beginPath();this.x.moveTo(-s/2,s/2);this.x.lineTo(s/2,0);this.x.lineTo(-s/2,-s/2);this.x.closePath();this.x.fill()}else this.x.fillRect(-s/2,-s/2,s,s);
+    this.x.strokeStyle=skin[1];this.x.lineWidth=2;this.x.strokeRect(-s/2,-s/2,s,s);this.x.fillStyle='#092038';this.x.fillRect(-7,-6,4,4);this.x.fillRect(3,-6,4,4);this.x.restore()
+  }
 }
