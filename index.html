@@ -8,21 +8,17 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#06122a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2342e8ff'/%3E%3Cpath d='M18 18h28v28H18z' fill='%23061b33'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./styles.css?v=22">
+<link rel="stylesheet" href="./styles.css?v=23">
 <title>Geometry Dash Offline</title>
 </head>
 <body>
 <canvas id="game"></canvas>
-<div class="hud">
-<div class="topbar"><div id="title" class="title">GEOMETRY DASH</div><div class="progress"><i id="progress"></i></div><div id="pct" class="pct">0%</div></div>
-<button id="pauseBtn" class="pauseBtn">PAUSA</button><button id="cpBtn" class="cpBtn">CP</button><button id="touchPause" class="touchPause">Ⅱ</button><button id="touchJump" class="touchJump">SALTA</button>
-</div>
+<div class="hud"><div class="topbar"><div id="title" class="title">GEOMETRY DASH</div><div class="progress"><i id="progress"></i></div><div id="pct" class="pct">0%</div></div><button id="pauseBtn" class="pauseBtn">PAUSA</button><button id="cpBtn" class="cpBtn">CP</button><button id="touchPause" class="touchPause">Ⅱ</button><button id="touchJump" class="touchJump">SALTA</button></div>
 <section id="menu" class="panel"><div class="card"><h1>GEOMETRY DASH</h1><p>Runner one-touch stile Geometry Dash, progettato per PC, iPhone, iPad e Android.</p><div class="stats"><div class="stat"><span class="small">BEST</span><b id="menuBest">0%</b></div><div class="stat"><span class="small">COMPLETATI</span><b id="menuDone">0/0</b></div><div class="stat"><span class="small">TENTATIVI</span><b id="menuAttempts">0</b></div></div><div id="levels" class="grid"></div><div class="row" style="margin-top:12px"><button id="practice" class="choice">Practice: OFF</button><button id="editorBtn" class="secondary">EDITOR</button><button id="settingsBtn" class="secondary">PERSONALIZZA</button></div></div></section>
 <section id="settings" class="panel hidden"><div class="card"><h1>PERSONALIZZA</h1><div class="row"><span>Cube</span><button class="skin choice" data-skin="cyan">Cyan</button><button class="skin choice" data-skin="red">Red</button><button class="skin choice" data-skin="green">Green</button><button class="skin choice" data-skin="gold">Gold</button></div><p class="small">Le impostazioni sono salvate localmente.</p><button id="settingsBack" class="secondary">INDIETRO</button></div></section>
 <section id="pause" class="panel hidden"><div class="card"><h1>PAUSA</h1><p id="pauseInfo"></p><div class="row"><button id="resumeBtn">RIPRENDI</button><button id="restartBtn" class="secondary">CHECKPOINT</button><button id="startBtn" class="secondary">INIZIO</button><button id="menuBtn" class="danger">MENU</button></div></div></section>
 <section id="result" class="panel hidden"><div class="card"><h1 id="resultTitle">CRASH!</h1><p id="resultInfo"></p><div class="row"><button id="resultRetry">RIPROVA</button><button id="resultMenu" class="secondary">MENU</button></div></div></section>
 <section id="editor" class="panel hidden editor"><div class="card"><h1>EDITOR BASE</h1><p class="editorHint">Seleziona un oggetto, clicca per inserirlo, trascina per spostarlo. Delete elimina quello selezionato.</p><div id="editorTools" class="row tools"></div><p id="editorStatus" class="small"></p><div class="row"><button id="editorTest">TEST</button><button id="editorSave">SALVA</button><button id="editorLoad" class="secondary">CARICA</button><button id="editorClear" class="danger">SVUOTA</button><button id="editorExit" class="secondary">ESCI</button></div></div></section>
-<script type="module" src="./app.js?v=22"></script>
-<script>if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=22').catch(()=>{}));</script>
+<script type="module" src="./app.js?v=23"></script><script>if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=23').catch(()=>{}));</script>
 </body>
 </html>
