@@ -1,57 +1,183 @@
-import { MODE, OBJECTS } from './engine.js';
+import { OBJECTS } from './engine.js';
 
 export const make=(type,x,y=0,w=36,h=36,extra={})=>({type,x,y,w,h,...extra});
 
-// Course design follows a simple playability rule: every mode transition
-// has a clear reaction window and no immediate hazard at the entrance.
-const stereo=[
-  make(OBJECTS.SPIKE,900),make(OBJECTS.SPIKE,1300),make(OBJECTS.DOUBLE,1700),make(OBJECTS.BLOCK,2150,0,60,60),make(OBJECTS.PAD,2500,0,50,12),make(OBJECTS.SPIKE,2850),
+// CLASSIC MODE
+// Cube only. No form portals, gravity portals, speed portals, mini or dual.
+// Level design follows the classic Geometry Dash pattern: automatic forward
+// movement with progressively harder jump timing using spikes, doubles,
+// blocks and platforms. Difficulty increases through timing density rather
+// than introducing new movement modes.
 
-  // SHIP: very wide central corridor; ceiling/floor saws are far apart.
-  make(OBJECTS.MODE_PORTAL,3300,0,36,160,{mode:MODE.SHIP}),
-  make(OBJECTS.SAW,4200,8,42,42),make(OBJECTS.SAW,4550,270,42,42),make(OBJECTS.SAW,4900,8,42,42),
-  make(OBJECTS.MODE_PORTAL,5250,0,36,160,{mode:MODE.CUBE}),
-
-  make(OBJECTS.SPIKE,5800),make(OBJECTS.DOUBLE,6200),
-  make(OBJECTS.MODE_PORTAL,6700,0,36,160,{mode:MODE.BALL}),make(OBJECTS.SPIKE,7300),make(OBJECTS.GRAVITY_PORTAL,7650,0,36,160),
-  make(OBJECTS.MODE_PORTAL,8100,0,36,160,{mode:MODE.CUBE}),make(OBJECTS.PAD,8600,0,50,12),
-
-  make(OBJECTS.MODE_PORTAL,9200,0,36,160,{mode:MODE.UFO}),make(OBJECTS.SPIKE,10100),
-  make(OBJECTS.MODE_PORTAL,10800,0,36,160,{mode:MODE.CUBE}),make(OBJECTS.SPIKE,11300),
-  make(OBJECTS.MODE_PORTAL,12000,0,36,160,{mode:MODE.WAVE}),make(OBJECTS.SPIKE,13000,0,34,42),make(OBJECTS.SPIKE,13600,245,34,42),
-  make(OBJECTS.MODE_PORTAL,14300,0,36,160,{mode:MODE.CUBE}),make(OBJECTS.SPIKE,15000),make(OBJECTS.DOUBLE,15500),make(OBJECTS.SPIKE,16000)
+const easy=[
+  make(OBJECTS.SPIKE,900),
+  make(OBJECTS.SPIKE,1300),
+  make(OBJECTS.BLOCK,1650,0,60,50),
+  make(OBJECTS.SPIKE,2050),
+  make(OBJECTS.PAD,2350,0,50,12),
+  make(OBJECTS.SPIKE,2700),
+  make(OBJECTS.SPIKE,3050),
+  make(OBJECTS.BLOCK,3450,0,60,50),
+  make(OBJECTS.SPIKE,3900),
+  make(OBJECTS.DOUBLE,4300),
+  make(OBJECTS.BLOCK,4700,0,70,55),
+  make(OBJECTS.BLOCK,4800,0,70,55),
+  make(OBJECTS.SPIKE,5400),
+  make(OBJECTS.SPIKE,5750),
+  make(OBJECTS.PAD,6100,0,50,12),
+  make(OBJECTS.SPIKE,6500),
+  make(OBJECTS.DOUBLE,6900),
+  make(OBJECTS.SPIKE,7350),
+  make(OBJECTS.BLOCK,7800,0,60,50),
+  make(OBJECTS.SPIKE,8250),
+  make(OBJECTS.DOUBLE,8650),
+  make(OBJECTS.SPIKE,9100),
+  make(OBJECTS.BLOCK,9500,0,70,55),
+  make(OBJECTS.SPIKE,10050),
+  make(OBJECTS.DOUBLE,10500),
+  make(OBJECTS.SPIKE,11000),
+  make(OBJECTS.SPIKE,11450),
+  make(OBJECTS.DOUBLE,11900),
+  make(OBJECTS.SPIKE,12350),
+  make(OBJECTS.SPIKE,12800),
+  make(OBJECTS.DOUBLE,13250),
+  make(OBJECTS.SPIKE,13700),
+  make(OBJECTS.BLOCK,14100,0,60,50),
+  make(OBJECTS.SPIKE,14500),
+  make(OBJECTS.DOUBLE,14900),
+  make(OBJECTS.SPIKE,15400)
 ];
 
-const speedRun=[
-  make(OBJECTS.SPIKE,900),make(OBJECTS.DOUBLE,1300),make(OBJECTS.BLOCK,1750,0,70,70),make(OBJECTS.SPIKE,2200),make(OBJECTS.PAD,2550,0,50,12),
-
-  // SHIP: long, open straight-fly section before the next mode switch.
-  make(OBJECTS.MODE_PORTAL,3100,0,36,160,{mode:MODE.SHIP}),
-  make(OBJECTS.SAW,4050,8,40,40),make(OBJECTS.SAW,4550,272,40,40),make(OBJECTS.SAW,5050,8,40,40),
-  make(OBJECTS.MODE_PORTAL,5400,0,36,160,{mode:MODE.CUBE}),make(OBJECTS.SPIKE,6000),
-  make(OBJECTS.GRAVITY_PORTAL,6500,0,36,160),make(OBJECTS.MODE_PORTAL,7000,0,36,160,{mode:MODE.BALL}),make(OBJECTS.SPIKE,7700),
-  make(OBJECTS.GRAVITY_PORTAL,8050,0,36,160),make(OBJECTS.MODE_PORTAL,8500,0,36,160,{mode:MODE.UFO}),make(OBJECTS.SPIKE,9400),
-  make(OBJECTS.MODE_PORTAL,10100,0,36,160,{mode:MODE.WAVE}),make(OBJECTS.SPIKE,11100),
-  make(OBJECTS.MODE_PORTAL,11800,0,36,160,{mode:MODE.CUBE}),make(OBJECTS.MINI_PORTAL,12400,0,36,160),make(OBJECTS.SPIKE,13200),
-  make(OBJECTS.MINI_PORTAL,13700,0,36,160),make(OBJECTS.DUAL_PORTAL,14300,0,36,160),make(OBJECTS.SPIKE,15200),make(OBJECTS.DUAL_PORTAL,15900,0,36,160),
-  make(OBJECTS.DOUBLE,16400),make(OBJECTS.SPIKE,16800)
+const medium=[
+  make(OBJECTS.SPIKE,850),
+  make(OBJECTS.DOUBLE,1200),
+  make(OBJECTS.SPIKE,1600),
+  make(OBJECTS.BLOCK,1950,0,70,55),
+  make(OBJECTS.SPIKE,2200),
+  make(OBJECTS.DOUBLE,2550),
+  make(OBJECTS.PAD,2900,0,50,12),
+  make(OBJECTS.SPIKE,3150),
+  make(OBJECTS.SPIKE,3450),
+  make(OBJECTS.DOUBLE,3750),
+  make(OBJECTS.BLOCK,4100,0,70,60),
+  make(OBJECTS.BLOCK,4210,0,70,60),
+  make(OBJECTS.SPIKE,4600),
+  make(OBJECTS.DOUBLE,4900),
+  make(OBJECTS.SPIKE,5250),
+  make(OBJECTS.SPIKE,5550),
+  make(OBJECTS.DOUBLE,5850),
+  make(OBJECTS.PAD,6200,0,50,12),
+  make(OBJECTS.SPIKE,6500),
+  make(OBJECTS.DOUBLE,6800),
+  make(OBJECTS.BLOCK,7150,0,65,60),
+  make(OBJECTS.SPIKE,7480),
+  make(OBJECTS.SPIKE,7750),
+  make(OBJECTS.DOUBLE,8020),
+  make(OBJECTS.BLOCK,8350,0,70,65),
+  make(OBJECTS.SPIKE,8700),
+  make(OBJECTS.DOUBLE,9000),
+  make(OBJECTS.SPIKE,9340),
+  make(OBJECTS.SPIKE,9600),
+  make(OBJECTS.DOUBLE,9860),
+  make(OBJECTS.PAD,10200,0,50,12),
+  make(OBJECTS.SPIKE,10500),
+  make(OBJECTS.DOUBLE,10800),
+  make(OBJECTS.SPIKE,11120),
+  make(OBJECTS.BLOCK,11450,0,70,65),
+  make(OBJECTS.SPIKE,11800),
+  make(OBJECTS.DOUBLE,12100),
+  make(OBJECTS.SPIKE,12420),
+  make(OBJECTS.DOUBLE,12740),
+  make(OBJECTS.SPIKE,13100),
+  make(OBJECTS.BLOCK,13450,0,75,65),
+  make(OBJECTS.SPIKE,13850),
+  make(OBJECTS.DOUBLE,14200),
+  make(OBJECTS.SPIKE,14600),
+  make(OBJECTS.DOUBLE,15000),
+  make(OBJECTS.SPIKE,15400),
+  make(OBJECTS.DOUBLE,15800),
+  make(OBJECTS.SPIKE,16200)
 ];
 
-const practiceLab=[
-  make(OBJECTS.SPIKE,1000),make(OBJECTS.PAD,1500,0,50,12),make(OBJECTS.SPIKE,2050),
-  make(OBJECTS.MODE_PORTAL,2600,0,36,160,{mode:MODE.SHIP}),
-  make(OBJECTS.SAW,3250,8,40,40),make(OBJECTS.SAW,3550,272,40,40),
-  make(OBJECTS.MODE_PORTAL,4000,0,36,160,{mode:MODE.CUBE}),
-  make(OBJECTS.MODE_PORTAL,4900,0,36,160,{mode:MODE.BALL}),make(OBJECTS.GRAVITY_PORTAL,5600,0,36,160),make(OBJECTS.MODE_PORTAL,6100,0,36,160,{mode:MODE.CUBE}),
-  make(OBJECTS.MODE_PORTAL,7000,0,36,160,{mode:MODE.UFO}),make(OBJECTS.SPIKE,7900),
-  make(OBJECTS.MODE_PORTAL,8600,0,36,160,{mode:MODE.WAVE}),make(OBJECTS.SPIKE,9700),
-  make(OBJECTS.MODE_PORTAL,10300,0,36,160,{mode:MODE.CUBE})
+const hard=[
+  make(OBJECTS.SPIKE,820),
+  make(OBJECTS.SPIKE,1080),
+  make(OBJECTS.DOUBLE,1320),
+  make(OBJECTS.SPIKE,1580),
+  make(OBJECTS.BLOCK,1840,0,70,65),
+  make(OBJECTS.SPIKE,2080),
+  make(OBJECTS.DOUBLE,2340),
+  make(OBJECTS.PAD,2600,0,50,12),
+  make(OBJECTS.SPIKE,2860),
+  make(OBJECTS.SPIKE,3090),
+  make(OBJECTS.DOUBLE,3320),
+  make(OBJECTS.BLOCK,3560,0,65,70),
+  make(OBJECTS.SPIKE,3810),
+  make(OBJECTS.DOUBLE,4040),
+  make(OBJECTS.SPIKE,4280),
+  make(OBJECTS.SPIKE,4510),
+  make(OBJECTS.DOUBLE,4740),
+  make(OBJECTS.PAD,4980,0,50,12),
+  make(OBJECTS.SPIKE,5220),
+  make(OBJECTS.DOUBLE,5450),
+  make(OBJECTS.SPIKE,5680),
+  make(OBJECTS.BLOCK,5920,0,70,70),
+  make(OBJECTS.SPIKE,6170),
+  make(OBJECTS.DOUBLE,6410),
+  make(OBJECTS.SPIKE,6650),
+  make(OBJECTS.SPIKE,6880),
+  make(OBJECTS.DOUBLE,7110),
+  make(OBJECTS.BLOCK,7350,0,70,70),
+  make(OBJECTS.SPIKE,7600),
+  make(OBJECTS.DOUBLE,7840),
+  make(OBJECTS.PAD,8080,0,50,12),
+  make(OBJECTS.SPIKE,8320),
+  make(OBJECTS.SPIKE,8540),
+  make(OBJECTS.DOUBLE,8760),
+  make(OBJECTS.SPIKE,8980),
+  make(OBJECTS.BLOCK,9200,0,70,75),
+  make(OBJECTS.DOUBLE,9440),
+  make(OBJECTS.SPIKE,9680),
+  make(OBJECTS.SPIKE,9910),
+  make(OBJECTS.DOUBLE,10140),
+  make(OBJECTS.PAD,10370,0,50,12),
+  make(OBJECTS.SPIKE,10600),
+  make(OBJECTS.DOUBLE,10820),
+  make(OBJECTS.SPIKE,11040),
+  make(OBJECTS.BLOCK,11260,0,72,75),
+  make(OBJECTS.SPIKE,11510),
+  make(OBJECTS.DOUBLE,11740),
+  make(OBJECTS.SPIKE,11970),
+  make(OBJECTS.SPIKE,12200),
+  make(OBJECTS.DOUBLE,12430),
+  make(OBJECTS.PAD,12660,0,50,12),
+  make(OBJECTS.SPIKE,12890),
+  make(OBJECTS.DOUBLE,13120),
+  make(OBJECTS.SPIKE,13350),
+  make(OBJECTS.BLOCK,13580,0,72,75),
+  make(OBJECTS.SPIKE,13830),
+  make(OBJECTS.DOUBLE,14060),
+  make(OBJECTS.SPIKE,14290),
+  make(OBJECTS.SPIKE,14520),
+  make(OBJECTS.DOUBLE,14750),
+  make(OBJECTS.SPIKE,14980),
+  make(OBJECTS.PAD,15210,0,50,12),
+  make(OBJECTS.SPIKE,15440),
+  make(OBJECTS.DOUBLE,15670),
+  make(OBJECTS.SPIKE,15900),
+  make(OBJECTS.DOUBLE,16130),
+  make(OBJECTS.SPIKE,16360),
+  make(OBJECTS.DOUBLE,16590),
+  make(OBJECTS.SPIKE,16820),
+  make(OBJECTS.DOUBLE,17050)
 ];
 
 export const LEVELS=[
-  {id:'stereo-basics',name:'Stereo Basics',difficulty:'Normal',length:16600,speed:275,music:'beat',objects:stereo},
-  {id:'speed-run',name:'Speed Run',difficulty:'Hard',length:17200,speed:320,music:'pulse',objects:speedRun},
-  {id:'practice-lab',name:'Practice Lab',difficulty:'Easy',length:11200,speed:250,music:'calm',objects:practiceLab}
+  {id:'classic-easy',name:'Classica — Facile',difficulty:'Facile',length:15800,speed:260,music:'beat',objects:easy},
+  {id:'classic-medium',name:'Classica — Medio',difficulty:'Medio',length:16600,speed:285,music:'beat',objects:medium},
+  {id:'classic-hard',name:'Classica — Difficile',difficulty:'Difficile',length:17400,speed:300,music:'pulse',objects:hard}
 ];
 
-export function emptyLevel(){return{id:'custom',name:'Il mio livello',difficulty:'Custom',length:9000,speed:285,music:'beat',objects:[]}}
+export function emptyLevel(){
+  return {id:'custom',name:'Livello Classico Personalizzato',difficulty:'Custom',length:9000,speed:285,music:'beat',objects:[]};
+}
