@@ -1,5 +1,5 @@
-const CACHE='geometry-dash-v13';
-const ASSETS=['./','./index.html','./app.js?v=13','./levels.js','./manifest.webmanifest'];
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET')return;let url;try{url=new URL(req.url)}catch{return}if(url.protocol!=='http:'&&url.protocol!=='https:')return;event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(res=>{if(res&&res.ok&&(res.type==='basic'||res.type==='cors')){const copy=res.clone();caches.open(CACHE).then(c=>c.put(req,copy)).catch(()=>{})}return res}).catch(()=>caches.match('./index.html'))))});
+const CACHE='geometry-dash-v14';
+const ASSETS=['./','./index.html','./app.js?v=14','./levels.js','./manifest.webmanifest'];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;let u;try{u=new URL(r.url)}catch{return}if(!['http:','https:'].includes(u.protocol))return;e.respondWith(caches.match(r).then(c=>c||fetch(r).then(res=>{if(res?.ok&&(res.type==='basic'||res.type==='cors')){const cp=res.clone();caches.open(CACHE).then(x=>x.put(r,cp)).catch(()=>{})}return res}).catch(()=>caches.match('./index.html'))))});
