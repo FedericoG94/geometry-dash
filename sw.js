@@ -1,5 +1,5 @@
-const CACHE='geometry-dash-v30';
-const ASSETS=['./','./index.html','./styles.css?v=30','./app.js?v=30','./engine.js','./renderer.js','./levels.js','./storage.js','./editor.js','./manifest.webmanifest'];
+const CACHE='geometry-dash-v31';
+const ASSETS=['./','./index.html','./styles.css?v=31','./app.js?v=31','./engine.js','./renderer.js','./levels.js','./storage.js','./editor.js','./manifest.webmanifest'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{const request=event.request;if(request.method!=='GET')return;let url;try{url=new URL(request.url)}catch{return}if(url.protocol!=='http:'&&url.protocol!=='https:')return;event.respondWith(caches.match(request).then(cached=>cached||fetch(request).then(response=>{if(response.ok&&(response.type==='basic'||response.type==='cors')){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(request,copy)).catch(()=>{})}return response}).catch(()=>caches.match('./index.html'))))});
